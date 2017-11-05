@@ -11,17 +11,17 @@ def save_image(new_image, file_name):
     misc.toimage(new_image).save(file_name)
 
 
-def gaussian_derivative_filter(sigma):
-    mid = int(sigma/2)
-    mask = np.zeros(sigma)
-    result_mask = np.zeros(sigma)
+def gaussian_derivative_filter(sigma, filter_size):
+    mid = int(filter_size/2)
+    mask = np.zeros(filter_size)
+    result_mask = np.zeros(filter_size)
     c = 0
-    for i in range(0, sigma):
+    for i in range(0, filter_size):
         i_pos = i - mid
         mask[i] += ((-1) * i_pos * math.exp((-1/2) * math.pow((i_pos / sigma), 2)))
         c += (i_pos * mask[i])
 
-    for i in range(0, sigma):
+    for i in range(0, filter_size):
         result_mask[i] += (mask[i]/c)
     return result_mask, np.transpose(result_mask)
 
@@ -63,8 +63,8 @@ def gaussian_conv(mask, image, mid):
     return result_image
 
 if __name__ == "__main__":
-    image = load_image("lena_downsample.png")
-    mask_x, mask_y = gaussian_derivative_filter(3)
+    image = load_image("lena_n.gif")
+    mask_x, mask_y = gaussian_derivative_filter(1, 3)
     #image = gaussian_conv_x_axes(mask_x, image, int(3/2))
     image = gaussian_conv_y_axes(mask_y, image, int(3/2))
     #image = gaussian_conv(mask_x, image, int(3/2))
